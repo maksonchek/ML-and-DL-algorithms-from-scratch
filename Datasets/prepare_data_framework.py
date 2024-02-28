@@ -12,7 +12,12 @@ class Data_Preparer():
     1) print_nans
     2) get_columns_type
     3) print_feture_types
-    4) 
+    4) drow_cat_cols_pie
+    5) drow_cat_cols_hist
+    6) drow_num_cols_corr
+    7) drow_num_cols_hist
+    8) plot_weights
+    9) drow_cors_with_target
     """
     def __init__(self,data: pd.DataFrame, cat_threshold:int = 10):
         self.data = data
@@ -122,6 +127,9 @@ class Data_Preparer():
             plt.show()
     
     def drow_num_cols_corr(self):
+        """
+        Отрисовывает матрицу корреляций для непрерывных признаков
+        """
         plt.figure(figsize=(8,8))
         sns.heatmap(
             self.data[self.num_cols].corr(),
@@ -130,6 +138,9 @@ class Data_Preparer():
             vmin=-1, vmax=1); # указывает начало цветовых кодов от -1 до 1.
     
     def drow_num_cols_hist(self):
+        """
+        Отрисовывает для численных признаков гистограммы
+        """
         for col in self.num_cols:
             plt.figure() 
             self.data[col].plot(kind='hist', color='green')
@@ -137,4 +148,26 @@ class Data_Preparer():
             plt.xlabel('Значение')
             plt.ylabel('Частота')
             plt.show()
+
+    def plot_weights(weights, weights_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame] :
+        """
+        Отрисовывает для каждого категориального признака гистограмму и возвращает самый информативный вес и самый неинформативный
+        """
+        x_ax = np.arange(len(weights))
+        y_ax = weights
+        print(y_ax)
+        plt.plot(x_ax, y_ax)
+        important = max(np.abs(np.max(weights)), np.abs(np.min(weights)))
+        not_important = weights[np.argmin(np.abs(weights))]
+        print(weights_df[weights_df[0] == important])
+        print(weights_df[weights_df[0] == not_important])
+        return weights_df[weights_df[0] == important], weights_df[weights_df[0] == not_important]
+    
+    def drow_cors_with_target(df:pd.DataFrame, target: str) -> None:
+        """
+        Отрисовывает корреляции признаков с целевой переменной. Отсотирован по убыванию.
+        """
+        correlations = df.drop(columns=target).corrwith(df[target]).sort_values(ascending = False)
+        plot = sns.barplot(y = correlations.index, x=correlations)
+        plot.figure.set_size_inches(15,10)
         
