@@ -6,3 +6,6 @@
 3) [Курс лекций Евгения Соколова](https://github.com/esokolov)
 4) [Хэндбук по ML от Яндекса](https://education.yandex.ru/handbook/ml)
 5) [Чувак пишет статьи с теорией и реализацией ML](https://habr.com/ru/users/egaoharu_kensei/publications/articles/)
+
+### Идейный вдохновитель:
+[Kochyan Lev](https://github.com/KochyanLV)
